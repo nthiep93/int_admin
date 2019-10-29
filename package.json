@@ -56,7 +56,7 @@
     "httpntlm": "^1.7.6",
     "image-size": "^0.7.4",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "lusca": "^1.5.2",
     "memory-cache": "^0.2.0",
     "moment": "^2.24.0",
