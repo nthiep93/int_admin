@@ -1,0 +1,60 @@
+extends layout
+
+block content
+    link(href='/morecss/bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/morecss/dataTables.bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+    script(src='/morecss/jquery.dataTables.min.js')
+    script(src='/morecss/dataTables.bootstrap.min.js')
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/')
+                        span Home 
+                    span &laquo; 
+    // //breadcrumbs
+    .inner_content_w3_agile_info.two_in
+        // tables
+        .agile-tables
+        .w3l-table-info.agile_info_shadow
+            h3.w3_inner_tittle.two Lịch sử tạo bài viết "#{dataTables.content.title}"
+            p Template: 
+                img(style='width: 170px;' src="/intranet/img_tmp/" + dataTables.codeTmp + ".png", alt="" )
+            table#table
+                thead
+                    tr
+                    th Tiêu đề
+                    th Version 
+                    th Người chỉnh sửa
+                    th Thời gian 
+                    th 
+                tbody
+                    tr
+                        td #{dataTables.content.title}
+                        td hiện hành
+                        td #{dataTables.author}
+                        td #{dataTables.updatedAt}
+                        td(style='width:220px') 
+                            a.btn.btn-default(href="view-article/" + dataTables.id target="_blank") View 
+                            span &nbsp
+                            a.btn.btn-default(href="edit-article/" + dataTables.id) Edit
+                            span &nbsp
+                    for row in dataTables.version
+                        tr
+                            td #{row.content.title}
+                            td 1.0
+                            td #{row.author}
+                            td #{row.dateUpdate}
+                            td(style='width:220px') 
+                                a.btn.btn-default(href="view-article/" + dataTables.id + "/" + row.version target="_blank") View 
+                                span &nbsp
+                                a.btn.btn-default(href="edit-article/" + dataTables.id + "/" + row.version) Edit
+                                span &nbsp
+        .clearfix
+        // //social_media
+        // //inner_content_w3_agile_info
+        // //inner_content
+    script.
+        $(document).ready(function() {
+            $('#table').DataTable();
+        } );

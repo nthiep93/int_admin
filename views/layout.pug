@@ -1,0 +1,57 @@
+doctype html
+html(lang='')
+  head
+    title #{title} - Intranet VIB
+    base(href="/")
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+    script(type='application/x-javascript').
+      addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+      function hideURLbar(){ window.scrollTo(0,1); }
+    // custom-theme
+    link(href='/assets/css/bootstrap.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/table-style.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/basictable.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/component.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/style_grid.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/style.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/assets/css/font-awesome.css' rel='stylesheet')
+    link(href='//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800' rel='stylesheet')
+    script(type='text/javascript' src='/assets/js/jquery-2.1.4.min.js')
+    script(src='/morecss/tree.jquery.js')
+    link(href='/morecss/jqtree.css' rel='stylesheet' type='text/css' media='all')
+  body
+    .wthree_agile_admin_info
+      include partials/header
+
+      .inner_content
+        include partials/flash
+        block content
+
+    include partials/footer
+
+    // copy rights end here
+    // js
+    
+    script(src='/assets/js/modernizr.custom.js')
+    script(src='/assets/js/classie.js')
+    script(src='/assets/js/gnmenu.js')
+    script.
+      new gnMenu(document.getElementById('gn-menu'));
+    // tables
+    script(type='text/javascript' src='/assets/js/jquery.basictable.min.js')
+    // //js
+    script(src='/assets/js/screenfull.js')
+    script.
+      $(function () {
+        $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
+        if (!screenfull.enabled) {
+          return false;
+        }
+        $('#toggle').click(function () {
+          screenfull.toggle($('#container')[0]);
+        });
+      });
+    script(src='/assets/js/jquery.nicescroll.js')
+    script(src='/assets/js/scripts.js')
+    script(type='text/javascript' src='/assets/js/bootstrap-3.1.1.min.js')

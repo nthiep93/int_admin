@@ -1,0 +1,42 @@
+doctype html
+head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=9; IE=8; IE=10; IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description' content='')
+    link(rel='icon' href='./img/logo_ico.png')
+    title S3
+    link(href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&subset=vietnamese' type='text/css' rel='stylesheet')
+    // Bootstrap core CSS
+    link(href='/intranet_html/v3/css/bootstrap.min.css' rel='stylesheet')
+    // font icon
+    link(rel='stylesheet' href='/intranet_html/v3/css/all.css')
+    // Styles for Intranet
+    link(href='/intranet_html/v3/css/dashboardStyle.css' rel='stylesheet')
+    link(href='/intranet_html/v3/css/T3.css' rel='stylesheet')
+header#header
+main.content(role='main')
+    .content_inner
+        // layout template 03
+        .temp3
+            .row.content
+                .col.menu
+                .col.info
+                    h1 #{article.content.title}
+                    .info
+                        p !{article.content.contents}
+        // end layout template 03
+// footer
+footer#footer
+script(src='/intranet_html/v3/js/jquery.min.js')
+script(src='/intranet_html/v3/js/bootstrap.min.js')
+script(src='/intranet_html/v3/js/templates.js')
+script(src='/intranet_html/v3/js/functions.js')
+script(src='/intranet_html/v3/js/T3.js')
+script(type='text/javascript').
+  window.onload = function(){
+    setTimeout(function(){
+        $('.menu-content li').removeClass('active');
+        $('.menu-content li').eq(0).addClass('active');
+    }, 300);
+  };

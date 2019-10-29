@@ -1,0 +1,117 @@
+extends layout
+
+block content
+    // when using the mode "code", it's important to specify charset utf-8
+    script(src='json-editor-master/dist/jsoneditor.min.js')
+    link(rel='stylesheet' id='theme_stylesheet')
+    link(rel='stylesheet' id='icon_stylesheet')
+    script(src='/assets/jsoneditor/jquery.min.js')
+    script(src='/assets/jsoneditor/jquery.sceditor.bbcode.min.js')
+    link(rel='stylesheet'  href="/assets/jsoneditor/jquery.sceditor.default.min.css")
+    link(rel='stylesheet'  href="/assets/jsoneditor/default.min.css")
+    link(rel='stylesheet'  href="/amc/5steps.css")
+
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/') Home
+                    span &laquo;
+                li
+                    a(href='/') Danh sách bài viết
+                    span &laquo;
+                li Inputs
+    // //breadcrumbs
+    .inner_content_w3_agile_info.two_in
+        // tables
+        .forms-main_agileits
+            .graph-form.agile_info_shadow
+                #editor
+                div.form-body
+                    button.btn.btn-default#submit New Version 
+                
+
+    script.
+        (function() {
+            var schema;
+            jsoneditor
+            // Kanet fix
+            JSONEditor.defaults.options["disable_collapse"] = true;
+            JSONEditor.defaults.options["disable_edit_json"] = true;
+            JSONEditor.defaults.options["disable_properties"] = true;
+
+            // Default starting schema
+            schema =  !{JSON.stringify(template['content'])};
+            
+            // Divs/textareas on the page
+            var $editor = document.getElementById('editor');
+
+            var jsoneditor;
+
+            var reload = function(keep_value) {
+                var startval = (jsoneditor && keep_value)? jsoneditor.getValue() : window.startval;
+                window.startval = undefined;
+
+                if(jsoneditor) jsoneditor.destroy();
+                jsoneditor = new JSONEditor($editor,{
+                    schema: schema,
+                    startval: startval
+                });
+                window.jsoneditor = jsoneditor;
+                jsoneditor.setValue(!{JSON.stringify(article)});  
+
+            };
+
+            
+
+            // Set the theme by loading the right stylesheets
+            var setTheme = function(theme,no_reload) {
+                theme = theme || '';
+
+                var mapping = {
+                    barebones: '',
+                    html: '',
+                    bootstrap3: '/asset/css/bootstrap.min.css'
+                };
+
+                if(typeof mapping[theme] === 'undefined') {
+                    theme = 'bootstrap3';
+                    document.getElementById('theme_switcher').value = theme;
+                }
+
+                JSONEditor.defaults.options.theme = theme;
+
+
+                if(!no_reload) reload(true);
+            };
+
+
+            // Set options from direct link
+            setTheme((window.location.href.match(/[?&]theme=([^&]+)/)||[])[1] || 'bootstrap3', true);
+
+            reload();
+
+            document.getElementById('submit').addEventListener('click',function() {
+                // Get the value from the editor
+                $.ajax({
+                    type: 'POST',
+                    url: '/new-article/#{idObj}',
+                    dataType: "json",
+                    data: {
+                        content: jsoneditor.getValue(),
+                        codeTemplate: "#{template['code']}"
+                    }
+                }).done(function (object) {
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    //alert("Failed: " + errorThrown);
+                }).always(function (a, textStatus, b) {
+                    if(textStatus == "success")
+                        window.location.href = "/";
+                });
+                // window.location.href = "/";
+            });
+
+            
+
+        })();

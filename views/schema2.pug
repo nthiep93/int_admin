@@ -1,0 +1,41 @@
+extends layout
+
+block content
+    script(src='https://rawgit.com/jdorn/json-editor/master/dist/jsoneditor.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+    script(src='//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js')
+    link(rel='stylesheet'  href="//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css")
+    script(src='//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js')
+    link(rel='stylesheet'  href="//cdn.jsdelivr.net/sceditor/1.4.3/themes/default.min.css")
+
+    .container
+        h1 JSON Editor WYSIWYG Example
+        p(style='margin-bottom:20px;') This example demonstrates JSONEditor&apos;s integration with SCEditor
+        #editor_holder
+        button#submit Submit (console.log)
+
+    script.
+         var editor = new JSONEditor(document.getElementById('editor_holder'),{
+            schema: {
+                type: "object",
+                title: "Blog Post",
+                properties: {
+                    title: {
+                    type: "string"
+                    },
+                    body: {
+                        type: "string",
+                        format: "html",
+                        options: {
+                            wysiwyg: true
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Hook up the submit button to log to the console
+        document.getElementById('submit').addEventListener('click',function() {
+            // Get the value from the editor
+            // console.log(editor.getValue());
+        });

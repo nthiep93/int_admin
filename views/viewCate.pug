@@ -1,0 +1,43 @@
+h3.w3_inner_tittle.two= "Danh mục '" + objCate.name + "'"
+.form-body
+    form(action="/updateCate", method="post")
+        .form-group
+            label Tên danh mục 
+            input.form-control(name='name' value=(objCate.name) type='text' placeholder='Nhập tên')
+        .form-group
+            label(for='exampleInputPassword1') Loại danh mục 
+            select.form-control(name='data' style="height:45px" )
+                option(value="all" selected=(objCate.data === "all")) Vừa bài viết vừa danh mục con
+                option(value="sub" selected=(objCate.data === "sub")) Danh mục con
+                option(value="news" selected=(objCate.data === "news")) Chỉ bài viết 
+        .form-group
+            label(for='exampleInputPassword1') Thuộc danh mục (Level 1)
+            select.form-control(name='level1' id="level1" style="height:45px" onchange="getLevel1()" )
+                option(value="") ----
+                for row in listCates
+                    - if(objCate.level == 2)
+                        option(value=row.code selected=(row.code == objCate.code))=row.name
+                    - else 
+                        option(value=row.code)=row.name
+        .form-group
+            label(for='exampleInputPassword1') Thuộc danh mục (Level 2)
+            select#viewLevel2.form-control(name='level2' style="height:45px" )
+                option(value="") ----
+        button.btn.btn-default(type='submit') Update
+        span &nbsp&nbsp
+        button.btn.btn-default(type='submit') Xem 20 bài viết 
+script.
+    function getLevel1(){
+        if(level1 != undefined){
+            var level1 = document.getElementById("level1").value;
+            document.getElementById("viewLevel2").innerHTML = "";
+            $.ajax({
+                type: 'GET',
+                url: '/getCateID/' + level1
+            }).done(function(result) {
+                document.getElementById("viewLevel2").innerHTML = result;
+            });
+        }
+        
+    }
+    getLevel1();

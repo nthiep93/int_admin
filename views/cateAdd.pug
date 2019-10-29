@@ -1,0 +1,56 @@
+extends layout
+
+block content
+    
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/') Home
+                    span &laquo;
+                li
+                    a(href='/') Quản lý danh mục
+                    span &laquo;
+                li Thêm mới
+    // //breadcrumbs
+    .forms-inner
+        .inner_content_w3_agile_info.two_in
+            .forms-main_agileits
+                .graph-form.agile_info_shadow
+                    h3.w3_inner_tittle.two Danh mục 
+                    .form-body
+                        form(action="", method="post")
+                            .form-group
+                                label Tên danh mục 
+                                input.form-control(name='name' type='text' placeholder='Nhập tên')
+                            .form-group
+                                label(for='exampleInputPassword1') Loại danh mục
+                                select.form-control(name='data' style="height:45px" )
+                                    option(value="all") Vừa bài viết vừa danh mục con
+                                    option(value="sub") Danh mục con
+                                    option(value="news") Chỉ bài viết 
+                            .form-group
+                                label(for='exampleInputPassword1') Thuộc danh mục (Level 1)
+                                select.form-control(name='level1' id="level1" style="height:45px" onchange="getLevel1()" )
+                                    option(value="") ----
+                                    for row in listCates
+                                        option(value=row.code)=row.name
+                            .form-group
+                                label(for='exampleInputPassword1') Thuộc danh mục (Level 2)
+                                select#viewLevel2.form-control(name='level2' style="height:45px" )
+                                    option(value="") ----
+                            button.btn.btn-default(type='submit') Thêm mới
+                
+        .clearfix(style="margin-bottom:30px")
+
+    script.
+        function getLevel1(){
+            var level1 = document.getElementById("level1").value;
+            document.getElementById("viewLevel2").innerHTML = "";
+            $.ajax({
+                type: 'GET',
+                url: '/getCateID/' + level1
+            }).done(function(result) {
+                document.getElementById("viewLevel2").innerHTML = result;
+            });
+        }

@@ -1,0 +1,44 @@
+doctype html
+head
+    meta(http-equiv='Content-Type' content='text/html;charset=utf-8')
+    title SCEditor Demo
+    link#theme-style(rel='stylesheet' href='https://www.sceditor.com/minified/themes/default.min.css')
+    script(src='https://rawgit.com/jdorn/json-editor/master/dist/jsoneditor.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+    link(rel='stylesheet'  href="//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css")
+    script(src='//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js')
+
+    .container
+        h1 JSON Editor WYSIWYG Example
+        p(style='margin-bottom:20px;') This example demonstrates JSONEditor&apos;s integration with SCEditor
+        #editor_holder
+        button#submit Submit (console.log)
+
+    script.
+        
+        var editor = new JSONEditor(document.getElementById('editor_holder'),{
+            schema: {
+                type: "object",
+                title: "Blog Post",
+                properties: {
+                    title: {
+                    type: "string"
+                    },
+                    body: {
+                        type: "string",
+                        format: "bbcode",
+                        style: 'https://www.sceditor.com/minified/themes/default.min.css',
+                        options: {
+                            wysiwyg: true
+                        }
+                    }
+                }
+            }
+        });
+        
+
+        // Hook up the submit button to log to the console
+        document.getElementById('submit').addEventListener('click',function() {
+            // Get the value from the editor
+            console.log(editor.getValue());
+        });

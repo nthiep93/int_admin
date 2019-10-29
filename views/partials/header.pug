@@ -1,0 +1,123 @@
+// /w3_agileits_top_nav
+// /nav
+.w3_agileits_top_nav
+  ul#gn-menu.gn-menu-main
+    // /nav_agile_w3l
+    li.gn-trigger
+      a.gn-icon.gn-icon-menu
+        i.fa.fa-bars(aria-hidden='true')
+        span Menu
+      nav.gn-menu-wrapper
+        .gn-scroller.scrollbar1
+          ul.gn-menu.agile_menu_drop
+            li
+              a(href='/')
+                i.fa.fa-tachometer
+                |  Dashboard
+            li
+              a(href='#')
+                i.fa.fa-file(aria-hidden='true')
+                |  Quản lý bài viết 
+                i.fa.fa-angle-down(aria-hidden='true')
+              ul.gn-submenu
+                if user.menu.addContent == true
+                  li.mini_list_agile
+                    a(href='/schema')
+                      i.fa.fa-caret-right(aria-hidden='true')
+                      |  Tạo mới bài viết
+                li.mini_list_w3
+                  a(href='/')
+                    i.fa.fa-caret-right(aria-hidden='true')
+                    |  Danh sách bài viết
+                if user.menu.managerUser == true
+                  li.mini_list_w3
+                    a(href='/users')
+                      i.fa.fa-caret-right(aria-hidden='true')
+                      |  Quản lý người dùng
+            li
+              a(href='#')
+                i.fa.fa-file-text-o(aria-hidden='true')
+                | My Account  
+                i.fa.fa-angle-down(aria-hidden='true')
+              ul.gn-submenu
+                li.mini_list_agile
+                  a(href='/account')
+                    i.fa.fa-caret-right(aria-hidden='true')
+                    |  Profile 
+                li.mini_list_agile
+                  a(href='/logout')
+                    i.fa.fa-caret-right(aria-hidden='true')
+                    |  Logout
+            li
+              a(href='table.html')
+                i.fa.fa-table(aria-hidden='true')
+                |  Phân quyền
+        // /gn-scroller
+    // //nav_agile_w3l
+    li.second.logo
+      h1
+        a(href='/')
+          i.fa.fa-graduation-cap(aria-hidden='true')
+          | Admin Intranet
+    li.second.admin-pic
+      ul.top_dp_agile
+        li.dropdown.profile_details_drop
+          a.dropdown-toggle(href='#' data-toggle='dropdown' aria-expanded='false')
+            .profile_img
+              span.prfil-img
+                img(src='images/VIB_Logo_Symbol.png' style="width:50px !important;" alt='')
+          ul.dropdown-menu.drp-mnu
+            li
+              a(href='#')
+                i.fa.fa-cog
+                |  Settings
+            li
+              a(href='#')
+                i.fa.fa-user
+                |  Profile
+            li
+              a(href='#')
+                i.fa.fa-sign-out
+                |  Logout
+    li.second.top_bell_nav
+      ul.top_dp_agile
+        li.dropdown.head-dpdn
+          a.dropdown-toggle(href='#' data-toggle='dropdown' aria-expanded='true')
+            i.fa.fa-bell-o(aria-hidden='true')
+            span.badge.blue 0
+          ul.dropdown-menu
+            li
+              .notification_header
+                h3 Your Notifications
+    li.second.top_bell_nav
+      ul.top_dp_agile
+        li.dropdown.head-dpdn
+          a.dropdown-toggle(href='#' data-toggle='dropdown' aria-expanded='true')
+            i.fa.fa-envelope-o(aria-hidden='true')
+            span.badge.blue 0
+          ul.dropdown-menu
+            li
+              .notification_header
+                h3 Your Messages
+    li.second.top_bell_nav
+      ul.top_dp_agile
+        li.dropdown.head-dpdn
+          a.dropdown-toggle(href='#' data-toggle='dropdown' aria-expanded='false')
+            i.fa.fa-tasks
+            span.badge.blue 0
+          ul.dropdown-menu
+            li
+              .notification_header
+                h3 You have 0 Pending tasks
+    li.second.w3l_search(style="display:none")
+      form(action='#' method='post')
+        input(type='search' name='search' placeholder='Search here...' required='')
+        button.btn.btn-default(type='submit')
+          i.fa.fa-search(aria-hidden='true')
+    li.second.full-screen
+      section.full-top
+        button#toggle
+          i.fa.fa-arrows-alt(aria-hidden='true')
+// //nav
+.clearfix
+// //w3_agileits_top_nav

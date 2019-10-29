@@ -1,0 +1,60 @@
+doctype html
+head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=9; IE=8; IE=10; IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description' content='')
+    link(rel='icon' href='/intranet/img/logo_ico.png')
+    title S13
+    link(href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&subset=vietnamese' type='text/css' rel='stylesheet')
+    // Bootstrap core CSS
+    link(href='/intranet/css/bootstrap.min.css' rel='stylesheet')
+    // font icon
+    link(rel='stylesheet' href='/intranet/css/all.css')
+    // Styles for Intranet
+    link(href='/intranet/css/dashboardStyle.css' rel='stylesheet')
+    link(href='/intranet/css/T12.css' rel='stylesheet')
+header#header
+.wrapper
+    .layout_twoCol
+        .container-fluid
+            .row
+                // left menu
+                #leftMenu.sidebar
+                // end left menu
+                main.content(role='main')
+                    .content_inner
+                        nav(aria-label='breadcrumb')
+                            ol.breadcrumb.mb-5
+                                li.breadcrumb-item
+                                    a.btn-hover-effect(href='/intranet_html/S1.html') Trang ch&#x1EE7;
+                        // layout template 13
+                        .temp12
+                            h2.title #{article.content.title}
+                            .date_post 06/11/2018
+                            #gallery
+                                p.image-total
+                                    span 45 h&igrave;nh &#x1EA3;nh
+                                #image-gallery
+                                    for row in article.content.image
+                                        .image
+                                            .img-wrapper
+                                                a(href=row.img)
+                                                    img.img-responsive(src=row.img)
+                                                .img-overlay
+                                                    i.fa.search-icon search
+
+                                // End image gallery
+                                // end layout template 13
+script(src='/intranet/js/jquery.min.js')
+script(src='/intranet/js/bootstrap.min.js')
+script(src='/intranet/js/templates.js')
+script(src='/intranet/js/functions.js')
+script(src='/intranet/js/T12.js')
+script.
+    window.onload = function(e){
+        setTimeout(function(){
+            $('.sub-menu-left').find('a').removeClass('active');
+            $($('.sub-menu-left').find('a')[7]).addClass('active');
+        }, 100);
+    }

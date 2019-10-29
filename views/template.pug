@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    link(href='/morecss/bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+    link(href='/morecss/dataTables.bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+    script(src='/morecss/jquery.dataTables.min.js')
+    script(src='/morecss/dataTables.bootstrap.min.js')
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/')
+                        span Home 
+                    span &laquo; 
+                    li Quản lý templates 
+    // //breadcrumbs
+    .inner_content_w3_agile_info.two_in
+        // tables
+        .agile-tables
+        .w3l-table-info.agile_info_shadow
+            h3.w3_inner_tittle.two Danh sách templates
+            table#table
+                thead
+                    th Tiêu đề
+                    th Template
+                    th Số bài viết
+                    th 
+                tbody
+                    for row in dataTables
+                        tr
+                            td #{row.title}
+                            td 
+                                p #{row.code}
+                                img(style='width: 70px;' src="/intranet/img_tmp/" + row.code + ".png", alt="" )
+                            td #{row.articles.length} bài viết
+                            td 
+                                a.btn.btn-default(href="template/" + row.code ) Xem bài viết
+        .clearfix
+        // //social_media
+        // //inner_content_w3_agile_info
+        // //inner_content
+    script.
+        $(document).ready(function() {
+            $('#table').DataTable();
+        } );

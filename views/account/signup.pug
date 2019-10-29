@@ -1,0 +1,60 @@
+extends ../layout
+
+block content
+  // /inner_content
+  .inner_content
+    // /inner_content_w3_agile_info
+    // breadcrumbs
+    .w3l_agileits_breadcrumbs
+      .w3l_agileits_breadcrumbs_inner
+        ul
+          li
+            a(href='/') Home
+            span &laquo;
+          li Create Account
+    // //breadcrumbs
+    .inner_content_w3_agile_info.two_in
+      // /forms
+      .forms-main_agileits
+        // /forms-inner
+        .forms-inner
+          // /set-1
+          .set-1_w3ls
+            .col-md-6.button_set_one.agile_info_shadow.graph-form
+              h3.w3_inner_tittle.two Danh sách user  
+              .grid-1
+                // tables
+              .agile-tables
+                .w3l-table-info.agile_info_shadow
+                  table#table
+                    thead
+                        tr
+                            th User đăng nhập 
+                    tbody
+                        for row in dataTables
+                            tr
+                                td #{row.email}
+        
+            .col-md-6.button_set_one.two.agile_info_shadow.graph-form
+              h3.w3_inner_tittle.two Create Account  
+              .grid-1
+                .form-body
+                  div
+                    form(id='signup-form', method='POST')
+                      .form-group
+                        label(for='exampleInputEmail1') Email  
+                        input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, required)
+                      .form-group
+                        label(for='exampleInputEmail1') Role    
+                        select.form-control(name='role' style="height:45px")
+                          option(value="content-author" selected) Content author
+                          option(value="content-editor") Content editor
+                          option(value="content-manager") Content manager
+                      .form-group
+                        label(for='exampleInputPassword1') Password
+                        input.form-control(type='password', name='password', id='password', placeholder='Password', required)
+                      .form-group
+                        label(for='exampleInputPassword1') Confirm Password
+                        input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password', required)
+                      button.btn.btn-default(type='submit') Submit
+            .clearfix  

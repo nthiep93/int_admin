@@ -1,0 +1,75 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=9; IE=8; IE=10; IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description' content='')
+  link(rel='icon' href='/intranet_html/v3/img/logo_ico.png')
+  title S5
+  link(href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&subset=vietnamese' type='text/css' rel='stylesheet')
+  // Bootstrap core CSS
+  link(href='/intranet_html/v3/css/bootstrap.min.css' rel='stylesheet')
+  // font icon
+  link(rel='stylesheet' href='/intranet_html/v3/css/all.css')
+  // Styles for Intranet
+  link(href='/intranet_html/v3/css/dashboardStyle.css' rel='stylesheet')
+  link(href='/intranet_html/v3/css/T5.css' rel='stylesheet')
+header#header
+main.content(role='main')
+  .content_inner
+    // layout template 05
+    .temp5
+      .row.content
+        .col.menu
+        .col.info
+          nav(aria-label='breadcrumb')
+            ol.breadcrumb.mb-5
+              li.breadcrumb-item
+                a(href='/intranet_html/v3/S5.html') &lt; Tr&#x1EDF; v&#x1EC1;
+          .info
+            h2.title #{article.content.title}
+            .date_post 11/03/2019 - 08:59dđ
+            .post-detail
+                for row in article.content.content
+                    if row.images != undefined
+                        for obj in row.images
+                            p 
+                                img(src=obj.img)
+                    p !{row.text} 
+            .other-news
+              h2.title Tin t&#x1EE9;c kh&aacute;c
+              ul
+                li.news-box
+                  a(href='')
+                    .img
+                      img(src='/intranet_html/v3/img/T1/u1.png' alt='')
+                    .info
+                      span.new-title VIB b&aacute;o l&#x1EE3;i nhu&#x1EAD;n tr&#x1B0;&#x1EDB;c thu&#x1EBF; 2018 cao k&#x1EF7; l&#x1EE5;c 2.741 t&#x1EF7; &dstrok;&#x1ED3;ng
+                      p.time 04/03/2019 - 15:20
+                      p
+                        | Ng&acirc;n h&agrave;ng TMCP Qu&#x1ED1;c T&#x1EBF; Vi&#x1EC7;t Nam c&ocirc;ng b&#x1ED1; k&#x1EBF;t qu&#x1EA3; kinh doanh n&abreve;m 2018, v&#x1EDB;i ch&#x1EC9; s&#x1ED1; l&#x1EE3;i nhu&#x1EAD;n tr&#x1B0;&#x1EDB;c thu&#x1EBF; h&#x1EE3;p nh&#x1EA5;t &dstrok;&#x1EA1;t 2.741 t&#x1EF7;, t&abreve;ng 95% so v&#x1EDB;i n&abreve;m 2017 v&agrave; v&#x1B0;&#x1EE3;t 37%.
+                li.news-box
+                  a(href='')
+                    .img
+                      img(src='/intranet_html/v3/img/T1/u3.png' alt='')
+                    .info
+                      span.new-title VIB ng&acirc;n h&agrave;ng t&#x1B0; nh&acirc;n &dstrok;&#x1EA7;u ti&ecirc;n &dstrok;&#x1B0;&#x1EE3;c NHNN trao th&#x1EF1;c hi&#x1EC7;n Basel II
+                      p.time 04/03/2019 - 15:20
+                      p
+                        | Theo &Ocirc;ng H&agrave;n Ng&#x1ECD;c V&utilde;, vi&#x1EC7;c &aacute;p d&#x1EE5;ng Basel II gi&uacute;p ng&acirc;n h&agrave;ng nhanh nh&#x1EA1;y h&#x1A1;n trong vi&#x1EC7;c &dstrok;&aacute;nh gi&aacute; kh&aacute;ch h&agrave;ng. Ng&#x1B0;&#x1EE3;c l&#x1EA1;i kh&aacute;ch h&agrave;ng c&utilde;ng s&#x1EBD; c&oacute; c&#x1A1; s&#x1EDF; &dstrok;&#x1EC3; &dstrok;&aacute;nh gi&aacute; &dstrok;&#x1B0;&#x1EE3;c ch&#x1EA5;t l&#x1B0;&#x1EE3;ng ng&acirc;n h&agrave;ng t&#x1ED1;t h&#x1A1;n
+  // end layout template 05
+// footer
+footer#footer
+script(src='/intranet_html/v3/js/jquery.min.js')
+script(src='/intranet_html/v3/js/bootstrap.min.js')
+script(src='/intranet_html/v3/js/templates.js')
+script(src='/intranet_html/v3/js/functions.js')
+script(src='/intranet_html/v3/js/T5.js')
+script(type='text/javascript').
+  window.onload = function(){
+    setTimeout(function(){
+        $('.menu-content li').removeClass('active');
+        $('.menu-content li').eq(6).addClass('active');
+    }, 300);
+  };
+// Start Open Web Analytics Tracker

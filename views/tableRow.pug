@@ -1,0 +1,187 @@
+link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+link(href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css' rel='stylesheet' type='text/css' media='all')
+script(src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js')
+script(src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js')
+link(href='/amc/css/dashboardStyle.css' rel='stylesheet' type='text/css' media='all')
+
+table#table
+    #myModal1.modal(style="display:none")
+        .modal-dialog
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Thông báo
+                // Modal body
+                .modal-body
+                    p.content1 
+                // Modal footer
+                .modal-footer
+                    button.btn.btn-danger#close-dialog(onclick='closeDialog()') Close
+
+    span.max-news(style="display:none", data=maxNews)
+    span.max-incentive(style="display:none", data=maxIncentive)
+    thead
+        tr
+            th Tiêu đề
+            th Tin tức ưu tiên
+            th Danh mục - Template
+            th Tình trạng
+            th 
+    tbody
+        for row in dataTables
+            tr
+                td 
+                    p #{row.content && row.content.title}
+                    p
+                        span(class="glyphicon glyphicon-user") #{row.author}
+                td
+                    - var id = row.id;
+                    if row.menuCate === "about.news"
+                        if row.priority
+                            p.priority.priority-news-active(id=id) Ưu tiên
+                        else
+                            p.priority(id=id)
+                    else if row.menuCate === "about.incentive"
+                        if row.priority
+                            p.priority.priority-incentive-active(id=id) Ưu tiên
+                        else
+                            p.priority(id=id)
+                td 
+                    - var str = "";
+                    for rowParent in listCates
+                        for rowChild in rowParent.children
+                            if rowChild.code == row.menuCate
+                                - str = rowChild.name;
+                    p #{str}
+                    p #{row.codeTmp}
+                td 
+                    span #{row.publish ? "Đã xuất bản" : "Chưa xuất bản"}
+                td.stick_col3(style='width:20px; text-align: right' ) 
+                    // The Modal
+                    .modal(id="myModal" + row.id)
+                        .modal-dialog
+                            .modal-content(style="text-align:left")
+                                // Modal Header
+                                .modal-header
+                                    h4.modal-title Delete
+                                    button.close(type='button' data-dismiss='modal') &times;
+                                // Modal body
+                                .modal-body
+                                    p Bạn có muốn xóa bài viết #{row.content.title} 
+                                .modal-footer
+                                    if true 
+                                        a.btn.btn-danger(href="delete/" + row.id) Delete
+                                    button.btn.btn-primary(type='button' data-dismiss='modal' style='padding-right:10px' ) Close
+
+                    .dropdown.group_btn_func
+                        button.btn.btn-default.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                            span.fa.fa-gear
+                        ul.dropdown-menu.dropdown-menu-right(aria-labelledby='dropdownMenu2')
+                            li
+                                if user.menu.editContent == true 
+                                    a.btn.btn-sm.btn_normal(href="edit-article/" + row.id) Chỉnh sửa
+                            li 
+                                if user.menu.deleteContent == true 
+                                    a.btn-sm.btn_normal(type='button' data-toggle='modal' data-target='#myModal'  + row.id) Xóa 
+                            li
+                                if user.menu.historyContent == true 
+                                    a.btn.btn-sm.btn_normal(href="history/" + row.id) #{row.version.length} Phiên bản
+                            li  
+                                 if user.menu.publishContent == true 
+                                    if row.publish
+                                        a.btn.btn-sm.btn_normal(href="publish/0/" + row.id) Gỡ bài
+                                    else 
+                                        a.btn.btn-sm.btn_normal(href="publish/1/" + row.id) Xuất bản
+                            li  
+                                if user.menu.publishContent == true && row.menuCate === "about.news" && row.publish === 1
+                                    - var id = row.id;
+                                    if row.priority
+                                        a.btn.btn-sm.btn_normal.prioritize(data="0", data-id=row.id,  onclick='test(this,"news")',id="option"+id) Gở ưu tiên
+                                    else
+                                        a.btn.btn-sm.btn_normal.prioritize(data="1", data-id=row.id, onclick='test(this,"news")',id="option"+id) Chọn ưu tiên
+                            li  
+                                if user.menu.publishContent == true && row.menuCate === "about.incentive" && row.publish === 1
+                                    - var id = row.id;
+                                    if row.priority
+                                        a.btn.btn-sm.btn_normal.prioritize(data="0", data-id=row.id,  onclick='test(this,"incentive")',id="option"+id) Gở ưu tiên
+                                    else
+                                        a.btn.btn-sm.btn_normal.prioritize(data="1", data-id=row.id, onclick='test(this,"incentive")',id="option"+id) Chọn ưu tiên
+                            
+
+script.
+    var table = $('#table').DataTable({
+        /* Disable initial sort */
+        "aaSorting": []
+    });
+    $(document).ready(function() {
+            //- $("#close-dialog").on("click",function() {    
+            //-     $("#myModal1").css("display","none");
+            //- });
+    });
+    function setPriority(index,id,type){
+        if (type ==="news"){
+            let priorityNewsCount = $(".priority-news-active")
+            let maxNews = $(".max-news").attr("data") ?  $(".max-news").attr("data") : 3
+ 
+            if (priorityNewsCount.length >= maxNews && index == 1){
+                $(".content1").html( 'Chỉ được chọn '+maxNews +' tin tức ưu tiên.');
+                $("#myModal1").css("display","block");
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: '/prioritize/' + index +"/"+id
+            }).done(function(result) {
+                let eleUpdate = $("#"+result.id);
+                let eleOption = $("#option"+result.id);
+                if (result.status == 1 ){
+                    eleUpdate.addClass("priority-news-active");
+                    eleUpdate.html("Ưu tiên");
+                    eleOption.html("Gở ưu tiên")
+                    eleOption.attr("data",0);
+                } else {
+                    eleUpdate.removeClass("priority-news-active");
+                    eleUpdate.html("");
+                    eleOption.html("Chọn ưu tiên")
+                    eleOption.attr("data",1);
+                }
+            });
+        } else if (type ==="incentive"){
+            let priorityIncentiveCount = $(".priority-incentive-active")
+            let maxIncentive = $(".max-incentive").attr("data") ?  $(".max-incentive").attr("data") : 5
+
+            if (priorityIncentiveCount.length >= maxIncentive && index == 1){
+                $(".content1").html( 'Chỉ được chọn '+maxIncentive +' ưu đãi ưu tiên.');
+                $("#myModal1").css("display","block");
+                return;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: '/prioritize/' + index +"/"+id
+            }).done(function(result) {
+                let eleUpdate = $("#"+result.id);
+                let eleOption = $("#option"+result.id);
+                if (result.status == 1 ){
+                    eleUpdate.addClass("priority-incentive-active");
+                    eleUpdate.html("Ưu tiên");
+                    eleOption.html("Gở ưu tiên")
+                    eleOption.attr("data",0);
+                } else {
+                    eleUpdate.removeClass("priority-incentive-active");
+                    eleUpdate.html("");
+                    eleOption.html("Chọn ưu tiên")
+                    eleOption.attr("data",1);
+                }
+            });
+        }
+    }
+    function test(e,type){
+        let index = e.getAttribute("data");
+        let id = e.getAttribute("data-id");
+        setPriority(index,id,type);
+    }
+    var closeDialog = function() {
+        $("#myModal1").css("display","none");
+    }

@@ -1,0 +1,390 @@
+extends layout
+
+block content
+    // when using the mode "code", it's important to specify charset utf-8
+    script(src='json-editor-master/dist/jsoneditor.min.js')
+    link(rel='stylesheet' id='theme_stylesheet')
+    link(rel='stylesheet' id='icon_stylesheet')
+    script(src='/assets/jsoneditor/jquery.min.js')
+    script(src='/assets/jsoneditor/jquery.sceditor.bbcode.min.js')
+    link(rel='stylesheet'  href="/assets/jsoneditor/jquery.sceditor.default.min.css")
+    script(src='/assets/jsoneditor/jquery.sceditor.xhtml.min.js')
+    link(rel='stylesheet'  href="/assets/jsoneditor/default.min.css")
+    link(rel='stylesheet'  href="/amc/5steps.css")
+    script(src='/morecss/tree.jquery.js')
+    link(href='/morecss/jqtree.css' rel='stylesheet' type='text/css' media='all')
+
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+
+
+    script(src='/morecss/popper.min.js' )
+    script(src='/morecss/bootstrap.min.js' )
+    input.default-cate(style="display:none" id="default-cate" type="text" value=defaultCate)
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/') Home
+                    span &laquo;
+                li
+                    a(href='/') Danh sách bài viết
+                    span &laquo;
+                li Inputs
+    // //breadcrumbs
+    .forms-inner
+        .clearfix(style="margin-bottom:30px")
+    .inner_content_w3_agile_info.two_in
+        // tables
+        .forms-main_agileits.col-md-0
+            .graph-form.agile_info_shadow
+                h3.w3_inner_tittle.two Chọn danh mục 
+                    button#hideShow(class="btn btn-default" style="color: #000" onclick="addDisplay()") Hide/Show
+                div(id="tree1" style="display:none")
+        .forms-main_agileits.col-md-0(id="formUpload" action="/import", method="post", enctype="multipart/form-data" style="display:none")
+            .graph-form.agile_info_shadow
+                h3.w3_inner_tittle.two Upload file
+                div#errorUpload(style="display:none;color:red") Upload file không thành công
+                input(id="file" type="file", name="ufile")
+                br
+                div.form-body
+                    button#upload.btn.btn-default Upload
+                div#countFile(style="display:none") 0
+                div#infoFile
+        .forms-main_agileits.col-md-0
+            .graph-form.agile_info_shadow
+                input(type="text" id="allCate" style="display:none")
+                h3#nameCate Thuộc Danh mục: Về VIB
+                br 
+                #editor
+                div.form-body
+                    button.btn.btn-default#update Update 
+                    span &nbsp &nbsp
+                    button.btn.btn-default#submit New Version 
+
+    .clearfix
+    script.
+
+        function checkParents($li, state) {
+            var $siblings = $li.siblings();
+            var $parent = $li.parent().closest('li');
+            state = state && checkSiblingChecked($siblings);
+            $parent.children('.form-check').find('input').prop('checked', state);
+            if ($parent.parents('li').length) 
+
+                checkParents($parent, state);
+
+        }
+
+        function checkSiblingChecked(siblings) {
+            var re=true;
+            siblings.each(function(index, element){
+                re = $(element).children('.form-check').find('input').prop('checked');
+                if (!re) {
+                return false;
+                } 
+            });
+            return re;
+        }
+
+        $('input').change(function () {
+            var $cb = $(this);
+            var $li = $cb.closest('li');
+            var state = $cb.prop('checked');
+
+            // check all children
+            $li.find('input').prop('checked', state);
+
+            // check all parents, as applicable
+            if ($li.parent().length)
+                checkParents($li, state);
+        });
+        (function() {
+            var schema;
+            jsoneditor
+            // Kanet fix
+            JSONEditor.defaults.options["disable_collapse"] = true;
+            JSONEditor.defaults.options["disable_edit_json"] = true;
+            JSONEditor.defaults.options["disable_properties"] = true;
+
+            // Default starting schema
+            schema =  !{JSON.stringify(template['content'])};
+
+            // Divs/textareas on the page
+            var $editor = document.getElementById('editor');
+
+            var jsoneditor;
+
+            var reload = function(keep_value) {
+                var startval = (jsoneditor && keep_value)? jsoneditor.getValue() : window.startval;
+                window.startval = undefined;
+
+                if(jsoneditor) jsoneditor.destroy();
+                jsoneditor = new JSONEditor($editor,{
+                    schema: schema,
+                    startval: startval
+                });
+                window.jsoneditor = jsoneditor;
+                jsoneditor.setValue(!{JSON.stringify(article)});  
+
+            };
+
+
+
+            // Set the theme by loading the right stylesheets
+            var setTheme = function(theme,no_reload) {
+                theme = theme || '';
+
+                var mapping = {
+                    barebones: '',
+                    html: '',
+                    bootstrap2: '/asset/css/bootstrap.min.css',
+                    bootstrap3: '/asset/css/bootstrap.min.css'
+                };
+
+                if(typeof mapping[theme] === 'undefined') {
+                    theme = 'bootstrap3';
+                    document.getElementById('theme_switcher').value = theme;
+                }
+
+                JSONEditor.defaults.options.theme = theme;
+
+
+                if(!no_reload) reload(true);
+            };
+
+
+            // Set options from direct link
+            setTheme((window.location.href.match(/[?&]theme=([^&]+)/)||[])[1] || 'bootstrap3', true);
+
+            reload();
+            $('#upload').on('click',function() {
+                var documentData = new FormData();
+                documentData.append('file', $('#file')[0].files[0]);
+                 $.ajax({
+                        type: 'POST',
+                        url: '/api/vib-policy/upload',
+                        contentType: false,
+                        processData: false,
+                        data: documentData,
+                        success: function(result) {
+                            $("#file")[0].value = "";
+                            if (result === "not support file"){
+                                $("#errorUpload").css("display", "block");
+                            } else {
+                                $("#errorUpload").css("display", "none");
+                                let indexFile = 1 +  parseInt($("#countFile")[0].innerHTML);
+                                let strInfoFile =  "</br>" + "FILE" + indexFile + ":   " + result;
+                                $("#countFile")[0].innerHTML = indexFile
+                                $("#infoFile")[0].innerHTML = $("#infoFile")[0].innerHTML + strInfoFile;
+                            }
+                        }
+                        
+                    })
+             });
+
+            // jsoneditor.setValue(JSON.parse(!{JSON.stringify(article["content"])}));  
+            document.getElementById('update').addEventListener('click',function() {
+                // Get the value from the editor
+                var cate = document.getElementById('allCate').value === "" ? document.getElementById('default-cate').value : document.getElementById('allCate').value;
+                $.ajax({
+                    type: 'POST',
+                    url: '/update-article/#{idObj}' ,
+                    dataType: "json",
+                    data: {
+                        content: jsoneditor.getValue(),
+                        codeTemplate: "#{template['code']}",
+                        cate: cate,
+                    }
+                }).done(function (object) {
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    //alert("Failed: " + errorThrown);
+                }).always(function (a, textStatus, b) {
+                    if(textStatus == "success")
+                        window.location.href = "/";
+                });
+                // window.location.href = "/";
+            });
+
+            document.getElementById('submit').addEventListener('click',function() {
+                 var cate = document.getElementById('allCate').value === "" ? document.getElementById('default-cate').value : document.getElementById('allCate').value;
+                // Get the value from the editor
+                $.ajax({
+                    type: 'POST',
+                    url: '/new-article/#{idObj}',
+                    dataType: "json",
+                    data: {
+                        content: jsoneditor.getValue(),
+                        codeTemplate: "#{template['code']}",
+                        cate: cate
+                    }
+                }).done(function (object) {
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    //alert("Failed: " + errorThrown);
+                }).always(function (a, textStatus, b) {
+                    if(textStatus == "success")
+                        window.location.href = "/";
+                });
+                // window.location.href = "/";
+            });
+
+
+
+        })();
+    script.
+        var flag = 0;
+        $(document).ready(function() {
+            $("[name='root[intro]']").keyup(function() {
+                var maxChars = 180;
+                if ($(this).val().length > maxChars) {
+                    $(this).val($(this).val().substr(0, maxChars));
+                    //Take action, alert or whatever suits
+                    alert("This field can take a maximum of 180 characters");
+                }
+            });
+
+            var old_selected_node = '';
+            var $tree = $('#tree1');
+
+
+            var ExampleData = {};
+            ExampleData.exampleData = !{JSON.stringify(listCates)};
+
+            var defaultCate = "";
+            var defaultCate = !{JSON.stringify(defaultCate)};
+            
+            document.getElementById('nameCate').innerHTML = "Thuộc danh mục: " + getNameCate(ExampleData.exampleData,defaultCate);
+            // upload file 
+            if (defaultCate ==="about.news" || defaultCate ==="about.incentive"){
+                $("#formUpload").css("display", "block");  
+            } else {
+                $("#formUpload").css("display", "none");  
+            }
+            ExampleData.getFirstLevelData = function(nodes) {
+                if (!nodes) {
+                    nodes = ExampleData.exampleData;
+                }
+
+                var data = [];
+
+                $.each(nodes, function() {
+                    var node = {
+                        name: this.name,
+                        code: this.name,
+                        id: this.code
+                    };
+
+                    if (this.children) {
+                        node.load_on_demand = true;
+                    }
+
+                    data.push(node);
+                });
+
+                return data;
+            };
+
+            ExampleData.getChildrenOfNode = function(node_id) {
+                var result = null;
+
+                function iterate(nodes) {
+                    $.each(nodes, function() {
+                        if (result) {
+                            return;
+                        } else {
+                            if (this.code == node_id) {
+                                result = this;
+                            }
+
+                            if (this.children) {
+                                iterate(this.children);
+                            }
+                        }
+                    });
+                }
+
+                iterate(ExampleData.exampleData);
+
+                return ExampleData.getFirstLevelData(result.children);
+            };
+
+            $tree.tree({
+                data: ExampleData.exampleData,
+                autoOpen: 1,
+                onCreateLi: function(node, $li) {
+                    // Append a link to the jqtree-element div.
+                    // The link has an url '#node-[id]' and a data property 'node-id'.
+                    $li.find('.jqtree-element').append(
+                        '<a class="edit" data-node-name="' + node.name + '" data-node-id="'+ node.code +'">&nbsp&nbspSelect</a>'
+                    );
+
+                }
+            });
+
+            // Handle a click on the edit link
+
+            $tree.on( 'click', '.edit', function(e) {
+                // Get the id from the 'node-id' data property
+                var node_id = $(e.target).data('node-id');
+                var node_name = $(e.target).data('node-name');
+                document.getElementById('allCate').value = node_id;
+                document.getElementById('nameCate').innerHTML = "Thuộc danh mục: " + node_name;
+                flag = 0;
+                $("#tree1").css("display", "none");  
+                // upload file 
+                if (node_id ==="about.news" || node_id ==="about.incentive"){
+                     $("#formUpload").css("display", "block");  
+                } else {
+                    $("#formUpload").css("display", "none");  
+                }
+            });
+        } );
+        function changeTable(d){
+            document.getElementById("viewTable").innerHTML = "";
+            $.ajax({
+                type: 'GET',
+                url: '/changeTable/' + d
+            }).done(function(result) {
+                document.getElementById("viewTable").innerHTML = result;
+                    var table = $('#table').DataTable({
+                        /* Disable initial sort */
+                        "aaSorting": []
+                });
+            });
+        }
+
+        function addDisplay(){
+            if( flag == 0 ){
+                flag = 1;
+                $("#tree1").css("display", "block");  
+            } else {
+                flag = 0;
+                $("#tree1").css("display", "none");  
+            }
+
+        }
+        function getNameCate(list,codeCate){
+            let result = "";
+            list.forEach(function(item){
+                if (item.code === codeCate){
+                    result =  item.name;
+                }
+                let children = item.children;
+                for (var index = 0; index < children.length; index++){
+                    if (children[index].code === codeCate){
+                        result = children[index].name
+                    }
+                }
+            });
+            return result;
+        }
+
+        $(".checkbox").change(function() {
+            var clist=document.getElementsByClassName("AMC");
+            if(this.checked) {
+                for (var i = 0; i < clist.length; ++i) { clist[i].checked = "checked"; }
+            } else {
+                for (var i = 0; i < clist.length; ++i) { clist[i].checked = ""; }
+            }
+        });

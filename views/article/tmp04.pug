@@ -1,0 +1,110 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=9; IE=8; IE=10; IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  meta(name='description' content='')
+  link(rel='icon' href='./img/logo_ico.png')
+  title S9
+  link(href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&subset=vietnamese' type='text/css' rel='stylesheet')
+  // Bootstrap core CSS
+  link(href='/intranet_html/v3/css/bootstrap.min.css' rel='stylesheet')
+  // font icon
+  link(rel='stylesheet' href='/intranet_html/v3/css/all.css')
+  // Styles for Intranet
+  link(href='/intranet_html/v3/css/dashboardStyle.css' rel='stylesheet')
+  link(href='/intranet_html/v3/css/T7.css' rel='stylesheet')
+header#header
+main.content(role='main')
+  .content_inner
+    // layout template 07
+    .temp7
+      .row.content
+        .col.menu
+        .col.info
+          h1 H&igrave;nh &#x1EA3;nh ho&#x1EA1;t &dstrok;&#x1ED9;ng
+          .all-gallery
+            .cover-select
+              .options
+                | Ch&#x1ECD;n t&#x1EA5;t c&#x1EA3; c&aacute;c n&abreve;m
+              ul#ull.closed
+                li Ch&#x1ECD;n t&#x1EA5;t c&#x1EA3; c&aacute;c n&abreve;m
+                li 2019
+                li 2018
+                li 2017
+                li 2016
+            ul.items.group-gallery
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src=article.content.image[0].img)
+                  .card-body
+                    h5.card-title #{article.content.title}
+                    p.card-text 20/01/2019
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src='/intranet_html/v3/img/T7/img2_u4964.png' alt='')
+                  .card-body
+                    h5.card-title H&#x1ED9;i ngh&#x1ECB; kinh doanh th&#x1B0;&#x1EDD;ng ni&ecirc;n 2019
+                    p.card-text 20/01/2019
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src='/intranet_html/v3/img/T7/img2_u4953.png' alt='')
+                  .card-body
+                    h5.card-title H&#x1ED9;i ngh&#x1ECB; kinh doanh th&#x1B0;&#x1EDD;ng ni&ecirc;n 2019
+                    p.card-text 20/01/2019
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src='/intranet_html/v3/img/T7/img2_u4977.png' alt='')
+                  .card-body
+                    h5.card-title H&#x1ED9;i ngh&#x1ECB; kinh doanh th&#x1B0;&#x1EDD;ng ni&ecirc;n 2019
+                    p.card-text 20/01/2019
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src='/intranet_html/v3/img/T7/img2_u4979.png' alt='')
+                  .card-body
+                    h5.card-title H&#x1ED9;i ngh&#x1ECB; kinh doanh th&#x1B0;&#x1EDD;ng ni&ecirc;n 2019
+                    p.card-text 20/01/2019
+              li.item
+                .card.lightGallery
+                  .card-img-top
+                    img(src='/intranet_html/v3/img/T7/img2_u4969.png' alt='')
+                  .card-body
+                    h5.card-title H&#x1ED9;i ngh&#x1ECB; kinh doanh th&#x1B0;&#x1EDD;ng ni&ecirc;n 2019
+                    p.card-text 20/01/2019
+            .demo-gallery(id='')
+              ul#gallery-1.list-unstyled.row
+                for row in article.content.image
+                  li.col-xs-6.col-sm-4.col-md-3(data-responsive='' data-src=row.img data-sub-html='')
+                    a(href='')
+                      img.img-responsive(src=row.img)
+                 
+          hr.bottom-line
+          .row.pagging
+            .col.arrow &lt;
+            .col.page.active 01
+            .col.page 02
+            .col.page 03
+            .col ...
+            .col.page 10
+            .col.arrow &gt;
+    // end layout template 07
+// footer
+footer#footer
+script(src='/intranet_html/v3/js/jquery.min.js')
+script(src='/intranet_html/v3/js/bootstrap.min.js')
+script(src='/intranet_html/v3/js/templates.js')
+script(src='/intranet_html/v3/js/functions.js')
+script(src='/intranet_html/v3/js/lightgallery-all.js')
+script(src='/intranet_html/v3/js/T7.js')
+script(type='text/javascript').
+  window.onload = function(){
+    setTimeout(function(){
+        $('.menu-content li').removeClass('active');
+        $('.menu-content li').eq(7).addClass('active');
+    }, 300);
+  };

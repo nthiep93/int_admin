@@ -1,0 +1,112 @@
+extends layout
+
+block content
+
+    .w3l_agileits_breadcrumbs
+        .w3l_agileits_breadcrumbs_inner
+            ul
+                li
+                    a(href='/')
+                        span Home 
+                    span &laquo; 
+                    li Quản lý danh mục
+    // //breadcrumbs
+    .inner_content_w3_agile_info.two_in
+        .col-md-4.agile-tables.w3l-table-info.agile_info_shadow
+            h3.w3_inner_tittle.two Danh mục
+            div(id="tree1")
+        // tables
+        .agile-tables.col-md-8 
+            .w3l-table-info.agile_info_shadow(id="viewTable")
+                include viewCate
+        .clearfix
+        // //social_media
+        // //inner_content_w3_agile_info
+        // //inner_content
+    script.
+        $(document).ready(function() {
+            
+            var $tree = $('#tree1');
+
+
+            var ExampleData = {};
+            ExampleData.exampleData = !{JSON.stringify(listCates)};
+
+            ExampleData.getFirstLevelData = function(nodes) {
+                if (!nodes) {
+                    nodes = ExampleData.exampleData;
+                }
+
+                var data = [];
+
+                $.each(nodes, function() {
+                    var node = {
+                        name: this.name,
+                        id: this.code
+                    };
+
+                    if (this.children) {
+                        node.load_on_demand = true;
+                    }
+
+                    data.push(node);
+                });
+
+                return data;
+            };
+
+            ExampleData.getChildrenOfNode = function(node_id) {
+                var result = null;
+
+                function iterate(nodes) {
+                    $.each(nodes, function() {
+                        if (result) {
+                            return;
+                        } else {
+                            if (this.id == node_id) {
+                                result = this;
+                            }
+
+                            if (this.children) {
+                                iterate(this.children);
+                            }
+                        }
+                    });
+                }
+
+                iterate(ExampleData.exampleData);
+
+                return ExampleData.getFirstLevelData(result.children);
+            };
+
+            $tree.tree({
+                data: ExampleData.exampleData,
+                onCreateLi: function(node, $li) {
+                    // Append a link to the jqtree-element div.
+                    // The link has an url '#node-[id]' and a data property 'node-id'.
+
+                    $li.find('.jqtree-element').append(
+                        '<a class="edit" data-node-id="'+ node.code +'">&nbsp&nbspedit</a>'
+                    );
+                }
+            });
+
+            // Handle a click on the edit link
+            $tree.on( 'click', '.edit', function(e) {
+                // Get the id from the 'node-id' data property
+                // $('#table').dataTable().fnClearTable();
+                var node_id = $(e.target).data('node-id');
+                changeTable(node_id)
+                // Get the node from the tree
+                
+            });
+        } );
+        function changeTable(d){
+            document.getElementById("viewTable").innerHTML = "";
+            $.ajax({
+                type: 'GET',
+                url: '/viewCate/' + d
+            }).done(function(result) {
+                document.getElementById("viewTable").innerHTML = result;
+            });
+        }
