@@ -33,7 +33,7 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/oracledb": "^4.0.4",
     "activedirectory": "^0.7.2",
-    "async": "^2.6.0",
+    "async": "^2.6.4",
     "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
